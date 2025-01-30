@@ -1,0 +1,26 @@
+{
+  "name": "kurisu",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hazy",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "discord.js": "^14.17.3",
+    "dotenv": "^16.4.7",
+    "jsdom": "^26.0.0",
+    "node-fetch": "^3.3.2",
+    "puppeteer-core": "^24.1.1",
+    "sequelize": "^6.37.5",
+    "sqlite3": "^5.1.7",
+    "undici": "^7.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "eslint": "^9.19.0"
+  }
+}
