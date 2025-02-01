@@ -13,7 +13,7 @@ module.exports = {
 		if (otherUser) {
 			const guildMember = await interaction.guild.members.fetch(user.id);
 			if (otherUser.id == '1333524063888343070') {
-				reply = `My name is Kurisu. I am a bot that lives in discord. I have been a part of this server since ${guildMember.joinedAt}`;
+				reply = `My name is Kurisu. I am a bot that lives in discord. I have been alive in this server since ${guildMember.joinedAt}`;
 			} else {
 				reply = `${otherUser}, they joined this server on ${guildMember.joinedAt}.`;
 			}

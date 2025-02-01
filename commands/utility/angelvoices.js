@@ -7,6 +7,9 @@ const generatorCacheTimes = {};
 const maxNumberOfGeneratorsCached = 100;
 const lastEditTimeCache = {};
 
+// makeGeneratorWindow and getGeneratorResult were copied over from the perchance discord bot.
+// They work for now but need to be reviewed for overhead/unused functionality. Remove these comments once that has been done.
+
 async function makeGeneratorWindow(generatorName) {
 	const response = await fetch(`https://perchance.org/api/downloadGenerator?generatorName=${generatorName}&__cacheBust=${Math.random()}`);
 	if (!response.ok) throw new Error(`Error: A generator called '${generatorName}' doesn't exist`);
