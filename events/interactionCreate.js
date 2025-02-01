@@ -8,7 +8,7 @@ module.exports = {
 		const command = interaction.client.commands.get(interaction.commandName);
 
 		if (!command) {
-			console.error(`No command matching ${interaction.commandName} was found.`);
+			console.error(`I am sorry, ${interaction.commandName} isn't a command in my memory.`);
 			return;
 		}
 
@@ -40,9 +40,9 @@ module.exports = {
 		} catch (error) {
 			console.error(error);
 			if (interaction.replied || interaction.deferred) {
-				await interaction.followUp({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
+				await interaction.followUp({ content: 'Error while executing your command.', flags: MessageFlags.Ephemeral });
 			} else {
-				await interaction.reply({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
+				await interaction.reply({ content: 'Error while executing your command.', flags: MessageFlags.Ephemeral });
 			}
 		}
 	}
