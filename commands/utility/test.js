@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -6,6 +6,6 @@ module.exports = {
 		.setDescription('this is a test')
 		.setDefaultMemberPermissions(0),
 	async execute(interaction) {
-		await interaction.reply('the test worked!');
+		await interaction.reply({ content: 'the test worked!', flags: MessageFlags.Ephemeral });
 	}
 };

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -14,7 +14,7 @@ module.exports = {
 		const command = interaction.client.commands.get(commandName);
 
 		if (!command) {
-			return interaction.reply(`I failed to locate a command with name \`${commandName}\`!`);
+			return interaction.reply({ content: `I failed to locate a command with name \`${commandName}\`!`, flags: MessageFlags.Ephemeral });
 		}
 
 		delete require.cache[require.resolve(`./${command.data.name}.js`)];
@@ -22,10 +22,10 @@ module.exports = {
 		try {
 			const newCommand = require(`./${command.data.name}.js`);
 			interaction.client.commands.set(newCommand.data.name, newCommand);
-			await interaction.reply(`I have reloaded the command called \`${newCommand.data.name}\`.`);
+			await interaction.reply({ content: `I have reloaded the command called \`${newCommand.data.name}\`.`, flags: MessageFlags.Ephemeral });
 		} catch (error) {
 			console.error(error);
-			await interaction.reply(`Error while reloading a command \`${command.data.name}\`:\n\`${error.message}\``);
+			await interaction.reply({ content: `Error while reloading a command \`${command.data.name}\`:\n\`${error.message}\``, flags: MessageFlags.Ephemeral });
 		}
 
 	}
