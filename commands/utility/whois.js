@@ -9,16 +9,16 @@ module.exports = {
 		),
 	async execute(interaction) {
 		let reply = '';
-		const user = await interaction.options.getUser('user');
-		if (user) {
+		const otherUser = await interaction.options.getUser('user');
+		if (otherUser) {
 			const guildMember = await interaction.guild.members.fetch(user.id);
-			if (user.id == '1333524063888343070') {
+			if (otherUser.id == '1333524063888343070') {
 				reply = `My name is Kurisu. I am a bot that lives in discord. I have been a part of this server since ${guildMember.joinedAt}`;
 			} else {
-				reply = `${user}, they joined this server on ${guildMember.joinedAt}.`;
+				reply = `${otherUser}, they joined this server on ${guildMember.joinedAt}.`;
 			}
 		} else {
-			reply = `${interaction.user.username}, you joined on ${interaction.member.joinedAt}.`;
+			reply = `You are ${interaction.user.username}. you joined on ${interaction.member.joinedAt}.`;
 		}
 		await interaction.reply(reply);
 	}

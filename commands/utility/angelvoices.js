@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, italic } = require('discord.js');
 const { JSDOM } = require('jsdom');
 
 const generatorWindows = {};
@@ -43,10 +43,10 @@ async function getGeneratorResult(generatorName, listNameOrCode, variableAssignm
 		generatorCacheTimes[generatorName] = Date.now();
 		lastGeneratorUseTimes[generatorName] = Date.now(); // <-- need this here so this generator doesn't get trimmed by the code below
 		if (Object.keys(generatorWindows).length > maxNumberOfGeneratorsCached) {
-	  const mostStaleGeneratorName = Object.entries(lastGeneratorUseTimes).sort((a, b) => a[1] - b[1])[0];
-	  generatorWindows[generatorName].close();
-	  delete generatorWindows[generatorName];
-	  delete lastGeneratorUseTimes[generatorName];
+			const mostStaleGeneratorName = Object.entries(lastGeneratorUseTimes).sort((a, b) => a[1] - b[1])[0];
+			generatorWindows[generatorName].close();
+			delete generatorWindows[generatorName];
+			delete lastGeneratorUseTimes[generatorName];
 		}
 	}
 	lastGeneratorUseTimes[generatorName] = Date.now();
@@ -113,6 +113,6 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply();
 		const result = await getGeneratorResult('arcanesystems');
-		await interaction.editReply(result);
+		await interaction.editReply(italic(result));
 	}
 };
