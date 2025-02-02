@@ -1,6 +1,6 @@
 const { REST, Routes } = require('discord.js');
-const { clientId, token } = require('./config.json');
-const { guildId } = require('./config.json');
+// eslint-disable-next-line no-unused-vars
+const { clientId, token, guildId, guildIdTEST } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -35,7 +35,8 @@ const rest = new REST().setToken(token);
 
 		// Refresh all commands in guild
 		const data = await rest.put(
-			Routes.applicationGuildCommands(clientId, guildId),
+			// Routes.applicationGuildCommands(clientId, guildId),
+			Routes.applicationGuildCommands(clientId, guildIdTEST),
 			{ body: commands }
 		);
 
