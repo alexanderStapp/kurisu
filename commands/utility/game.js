@@ -51,8 +51,7 @@ module.exports = {
 				const querySubmission = modalInteraction.fields.getTextInputValue('gameQueryModalInput');
 				axiosConfig.data = `fields *; search "${querySubmission}"; limit 3;`;
 				axios.request(axiosConfig).then(response => {
-					modalInteraction.reply(JSON.stringify(response.data));
-					console.log(JSON.stringify(response.data));
+					modalInteraction.reply(`You searched for \`${querySubmission}\` and I found this: ${JSON.stringify(response.data)}`);
 				});
 			})
 			.catch((err) => {
