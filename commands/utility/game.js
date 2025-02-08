@@ -11,7 +11,7 @@ const axios = require('axios').default;
 const axiosConfig = {
 	method: 'post',
 	maxBodyLength: Infinity,
-	url: 'https://api.igdb.com/v4/search',
+	url: 'https://api.igdb.com/v4/games',
 	headers: {
 	  'Client-ID': idgbClientId,
 	  'Content-Type': 'text/plain',
@@ -49,7 +49,7 @@ module.exports = {
 			.awaitModalSubmit({ filter, time: 30_000 })
 			.then(async (modalInteraction) => {
 				const querySubmission = modalInteraction.fields.getTextInputValue('gameQueryModalInput');
-				axiosConfig.data = `fields *; search "${querySubmission}"; limit 3;`;
+				axiosConfig.data = `fields name; where name ~ "${querySubmission}"*; sort rating desc; limit 5;`;
 				axios.request(axiosConfig).then(response => {
 					modalInteraction.reply(`You searched for \`${querySubmission}\` and I found this: ${JSON.stringify(response.data)}`);
 				});
