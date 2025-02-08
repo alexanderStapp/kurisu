@@ -9,6 +9,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "apicalypse": "^0.3.1",
+    "axios": "^1.7.9",
     "discord.js": "^14.17.3",
     "dotenv": "^16.4.7",
     "jsdom": "^26.0.0",

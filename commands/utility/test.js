@@ -6,6 +6,6 @@ module.exports = {
 		.setDescription('this is a test')
 		.setDefaultMemberPermissions(0),
 	async execute(interaction) {
-		await interaction.reply({ content: 'the test worked!', flags: MessageFlags.Ephemeral });
+		await interaction.reply({ content: 'the test worked.', flags: MessageFlags.Ephemeral });
 	}
 };
