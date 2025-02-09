@@ -42,6 +42,7 @@ async function getGeneratorResult(generatorName, listNameOrCode, variableAssignm
 		generatorCacheTimes[generatorName] = Date.now();
 		lastGeneratorUseTimes[generatorName] = Date.now(); // <-- need this here so this generator doesn't get trimmed by the code below
 		if (Object.keys(generatorWindows).length > maxNumberOfGeneratorsCached) {
+			// eslint-disable-next-line no-unused-vars
 			const mostStaleGeneratorName = Object.entries(lastGeneratorUseTimes).sort((a, b) => a[1] - b[1])[0];
 			generatorWindows[generatorName].close();
 			delete generatorWindows[generatorName];

@@ -20,6 +20,18 @@ const axiosConfig = {
 	data: ''
 };
 
+const gameModal = {
+	name: '',
+	value: ''
+};
+
+const exampleEmbed = {
+	color: 0x0099ff,
+	title: 'You searched for',
+	description: 'Some description here',
+	fields: []
+};
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('game')
@@ -51,7 +63,17 @@ module.exports = {
 				const querySubmission = modalInteraction.fields.getTextInputValue('gameQueryModalInput');
 				axiosConfig.data = `fields name; where name ~ "${querySubmission}"*; sort rating desc; limit 5;`;
 				axios.request(axiosConfig).then(response => {
-					modalInteraction.reply(`You searched for \`${querySubmission}\` and I found this: ${JSON.stringify(response.data)}`);
+					exampleEmbed.title = `You searched for \`${querySubmission}\``;
+					exampleEmbed.description = 'and I found this:';
+					for (let i = 0; i < response.data.length; i++) {
+						exampleEmbed.fields.push(Object.create(gameModal));
+						exampleEmbed.fields[i].name = response.data[i].name;
+						exampleEmbed.fields[i].value = `id: ${response.data[i].id}`;
+					};
+					modalInteraction.reply({ embeds: [exampleEmbed] });
+
+					// this is janky and needs to be revisited
+					exampleEmbed.fields = [];
 				});
 			})
 			.catch((err) => {
