@@ -20,7 +20,7 @@ const axiosConfig = {
 	data: ''
 };
 
-const gameModal = {
+const gameModel = {
 	name: '',
 	value: ''
 };
@@ -66,7 +66,7 @@ module.exports = {
 					exampleEmbed.title = `You searched for \`${querySubmission}\``;
 					exampleEmbed.description = 'and I found this:';
 					for (let i = 0; i < response.data.length; i++) {
-						exampleEmbed.fields.push(Object.create(gameModal));
+						exampleEmbed.fields.push(Object.create(gameModel));
 						exampleEmbed.fields[i].name = response.data[i].name;
 						exampleEmbed.fields[i].value = `id: ${response.data[i].id}`;
 					};
