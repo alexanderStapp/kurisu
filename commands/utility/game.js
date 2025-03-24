@@ -5,7 +5,7 @@ const { SlashCommandBuilder,
 	TextInputStyle
 } = require('discord.js');
 
-const { idgbClientId, idgbAccessToken } = require('../../config.json');
+const { IDGB_CLIENT_ID, IDGB_ACCESS_TOKEN } = require('../../config.json');
 const axios = require('axios').default;
 
 const axiosConfig = {
@@ -13,9 +13,9 @@ const axiosConfig = {
 	maxBodyLength: Infinity,
 	url: 'https://api.igdb.com/v4/games',
 	headers: {
-	  'Client-ID': idgbClientId,
+	  'Client-ID': IDGB_CLIENT_ID,
 	  'Content-Type': 'text/plain',
-	  'Authorization': `Bearer ${idgbAccessToken}`
+	  'Authorization': `Bearer ${IDGB_ACCESS_TOKEN}`
 	},
 	data: ''
 };
