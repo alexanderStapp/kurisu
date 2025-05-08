@@ -2,7 +2,6 @@ const { Events, ActivityType } = require('discord.js');
 const getGeneratorResult = require('../services/getGeneratorOutput');
 const sendMessageAndCreateThread = require('../services/sendMessageAndCreateThread');
 const cron = require('node-cron');
-const Characters = require('../models/Characters');
 
 module.exports = {
 	name: Events.ClientReady,
@@ -30,10 +29,9 @@ module.exports = {
 			timezone: 'America/Los_Angeles'
 		});
 
-		console.log('syncing dbs...');
-		Characters.sync();
-
 		// ready
-		console.log(`Ready. Logged in as self: ${client.user.tag}`);
+		console.log(`Ready. Logged in as self: ${client.user.tag}`,
+			console.log()
+		);
 	}
 };

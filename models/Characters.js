@@ -1,11 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
 	return sequelize.define('characters', {
 		id: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+			unique: true
+		},
+		fighter_number: {
 			type: DataTypes.INTEGER
 		},
 		name: {
-			type: DataTypes.STRING,
-			unique: true
+			type: DataTypes.STRING
 		},
 		code_name: {
 			type: DataTypes.STRING,
