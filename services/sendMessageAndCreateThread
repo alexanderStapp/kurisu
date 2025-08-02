@@ -1,0 +1,20 @@
+// Example of creating a thread from the bot's last message
+async function sendMessageAndCreateThread(channel, messageContent, threadName, duration) {
+  try {
+    // Send the message
+    const sentMessage = await channel.send(messageContent);
+    
+    // Create a thread from it
+    const thread = await sentMessage.startThread({
+      name: threadName,
+      autoArchiveDuration: duration,
+    });
+    
+    return { message: sentMessage, thread: thread };
+  } catch (error) {
+    console.error('Error sending message or creating thread:', error);
+    throw error;
+  }
+}
+
+module.exports = sendMessageAndCreateThread;

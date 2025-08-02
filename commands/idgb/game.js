@@ -54,7 +54,7 @@ module.exports = {
 		await interaction.showModal(queryModal);
 
 		// Wait for modal submission
-
+		// eslint-disable-next-line no-shadow
 		const filter = (interaction) => interaction.customId === `gameQueryModal-${interaction.user.id}`;
 
 		interaction
