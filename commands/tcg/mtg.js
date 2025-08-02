@@ -8,30 +8,6 @@ const { SlashCommandBuilder,
 
 const axios = require('axios').default;
 
-// const mtg = require('mtgsdk');
-
-// async function getCardByName(cardName) {
-// 	const axiosConfig = {
-// 		method: 'get',
-// 		url: `/cards/named?fuzzy=${encodeURIComponent(cardName)}`,
-// 		baseURL: 'https://api.scryfall.com',
-// 		headers: {
-// 			'User-Agent': 'Kurisu/1.0',
-// 			'Accept': 'application/json'
-// 		}
-// 	};
-// 	try {
-// 		await axios.request(axiosConfig).then(response => {
-// 			console.log('console log b4 return', response.data);
-// 			return response.data;
-// 		});
-// 	} catch (error) {
-// 		if (error) {
-// 			console.log(error);
-// 		}
-// 	}
-// }
-
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('mtg')

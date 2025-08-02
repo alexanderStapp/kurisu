@@ -1,3 +1,6 @@
+// REFACTOR!! compare with Kurisu\commands\tcg\mtg.js
+
+
 const { SlashCommandBuilder,
 	ModalBuilder,
 	ActionRowBuilder,
