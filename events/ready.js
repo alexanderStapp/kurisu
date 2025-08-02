@@ -1,7 +1,7 @@
 const { Events, ActivityType } = require('discord.js');
 const getGeneratorResult = require('../services/getGeneratorOutput');
-const sendMessageAndCreateThread = require('../services/sendMessageAndCreateThread');
-const cron = require('node-cron');
+// const sendMessageAndCreateThread = require('../services/sendMessageAndCreateThread');
+// const cron = require('node-cron');
 
 const Sequelize = require('sequelize');
 
@@ -23,22 +23,22 @@ module.exports = {
 		client.user.setActivity(await getGeneratorResult('arcanesystems'), { type: ActivityType.Custom });
 
 		// cron test
-		cron.schedule('* * * * *', async () => {
-			const channel = client.channels.cache.get('493276796222046208');
-			try {
-				await sendMessageAndCreateThread(
-				  channel,
-				  'This is a scheduled test.',
-				  'cronjob discussion',
-				  4320
-				);
-			  } catch (error) {
-				console.error('There was an error creating the message thread.', error);
-			  }
+		// cron.schedule('* * * * *', async () => {
+		// 	const channel = client.channels.cache.get('493276796222046208');
+		// 	try {
+		// 		await sendMessageAndCreateThread(
+		// 		  channel,
+		// 		  'This is a scheduled test.',
+		// 		  'cronjob discussion',
+		// 		  4320
+		// 		);
+		// 	  } catch (error) {
+		// 		console.error('There was an error creating the message thread.', error);
+		// 	  }
 
-		}, {
-			timezone: 'America/Los_Angeles'
-		});
+		// }, {
+		// 	timezone: 'America/Los_Angeles'
+		// });
 
 		// ready
 		console.log(`Ready. Logged in as self: ${client.user.tag}`,
