@@ -34,17 +34,17 @@ const rest = new REST().setToken(TOKEN);
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
 		// Refresh all commands in guild
-		const data = await rest.put(
-			// Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
-			Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID_TEST),
-			{ body: commands }
-		);
-
-		// Refresh all commands globally
 		// const data = await rest.put(
-		// 	Routes.applicationCommands(CLIENT_ID),
+		// 	// Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
+		// 	Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID_TEST),
 		// 	{ body: commands }
 		// );
+
+		// Refresh all commands globally
+		const data = await rest.put(
+			Routes.applicationCommands(CLIENT_ID),
+			{ body: commands }
+		);
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
 	} catch (error) {

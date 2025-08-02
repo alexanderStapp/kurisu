@@ -72,7 +72,7 @@ module.exports = {
 				}).then(response => {
 					const mtgEmbed = new EmbedBuilder()
 						.setColor(0x0099ff)
-						.setTitle(`You searched for \`${querySubmission}\``)
+						.setTitle(`${interaction.user.username} searched for \`${querySubmission}\``)
 						.setDescription('and I found this:')
 						.setURL(response.data.scryfall_uri)
 						.setImage(response.data.image_uris.normal);
