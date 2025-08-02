@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
 const characterSource = require('./sources/charactersSource');
+const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('database', 'user', 'password', {
 	host: 'localhost',

@@ -3,11 +3,22 @@ const getGeneratorResult = require('../services/getGeneratorOutput');
 const sendMessageAndCreateThread = require('../services/sendMessageAndCreateThread');
 const cron = require('node-cron');
 
+const Sequelize = require('sequelize');
+
+const sequelize = new Sequelize('database', 'user', 'password', {
+	host: 'localhost',
+	dialect: 'sqlite',
+	logging: false,
+	storage: 'database.sqlite'
+});
+
+const Characters = require('../models/Characters')(sequelize, Sequelize.DataTypes);
+
 module.exports = {
 	name: Events.ClientReady,
 	once: true,
 	async execute(client) {
-
+		const dbTest = await Characters.findOne({ where: { fighter_number: 1 } });
 		// angel voices activity
 		client.user.setActivity(await getGeneratorResult('arcanesystems'), { type: ActivityType.Custom });
 
@@ -31,7 +42,7 @@ module.exports = {
 
 		// ready
 		console.log(`Ready. Logged in as self: ${client.user.tag}`,
-			console.log()
+			dbTest.name
 		);
 	}
 };
