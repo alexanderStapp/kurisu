@@ -11,15 +11,15 @@ function colorCheck(colorsArray) {
 		return 'DarkGrey';
 	} else if (colorsArray.length == 5) {
 		return colorOptionsArray[Math.floor(Math.random() * 5)];
-	} else if (colorsArray[0].toLowerCase() == 'w') {
+	} else if (colorsArray.find((color) => color.toLowerCase() == 'w')) {
 		return 'White';
-	} else if (colorsArray[0].toLowerCase() == 'u') {
+	} else if (colorsArray.find((color) => color.toLowerCase() == 'u')) {
 		return 'Blue';
-	} else if (colorsArray[0].toLowerCase() == 'b') {
+	} else if (colorsArray.find((color) => color.toLowerCase() == 'b')) {
 		return 'NotQuiteBlack';
-	} else if (colorsArray[0].toLowerCase() == 'r') {
+	} else if (colorsArray.find((color) => color.toLowerCase() == 'r')) {
 		return 'Red';
-	} else if (colorsArray[0].toLowerCase() == 'g') {
+	} else if (colorsArray.find((color) => color.toLowerCase() == 'g')) {
 		return 'DarkGreen';
 	}
 }
@@ -45,6 +45,7 @@ module.exports = {
 				'Accept': 'application/json'
 			}
 		}).then(response => {
+			console.log(response.data);
 			const mtgEmbed = new EmbedBuilder()
 				.setColor(colorCheck(response.data.colors))
 				.setTitle(response.data.name)
