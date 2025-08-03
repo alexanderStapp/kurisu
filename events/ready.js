@@ -18,6 +18,10 @@ module.exports = {
 	name: Events.ClientReady,
 	once: true,
 	async execute(client) {
+
+		// This takes ~1 hour to update
+		client.application.commands.set([]);
+
 		const dbTest = await Characters.findOne({ where: { fighter_number: 1 } });
 		// angel voices activity
 		client.user.setActivity(await getGeneratorResult('arcanesystems'), { type: ActivityType.Custom });

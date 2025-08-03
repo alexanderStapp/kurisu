@@ -36,6 +36,7 @@ const exampleEmbed = {
 };
 
 module.exports = {
+	category: 'search',
 	data: new SlashCommandBuilder()
 		.setName('game')
 		.setDescription('Search for a videogame'),
