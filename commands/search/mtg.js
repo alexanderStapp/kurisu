@@ -5,7 +5,27 @@ const { SlashCommandBuilder,
 
 const axios = require('axios').default;
 
+function colorCheck(colorsArray) {
+	const colorOptionsArray = ['White', 'Blue', 'NotQuiteBlack', 'Red', 'DarkGreen'];
+	if (colorsArray === undefined || colorsArray.length == 0) {
+		return 'DarkGrey';
+	} else if (colorsArray.length == 5) {
+		return colorOptionsArray[Math.floor(Math.random() * 5)];
+	} else if (colorsArray[0].toLowerCase() == 'w') {
+		return 'White';
+	} else if (colorsArray[0].toLowerCase() == 'u') {
+		return 'Blue';
+	} else if (colorsArray[0].toLowerCase() == 'b') {
+		return 'NotQuiteBlack';
+	} else if (colorsArray[0].toLowerCase() == 'r') {
+		return 'Red';
+	} else if (colorsArray[0].toLowerCase() == 'g') {
+		return 'DarkGreen';
+	}
+}
+
 module.exports = {
+	cooldown: 5,
 	category: 'search',
 	data: new SlashCommandBuilder()
 		.setName('mtg')
@@ -26,7 +46,7 @@ module.exports = {
 			}
 		}).then(response => {
 			const mtgEmbed = new EmbedBuilder()
-				.setColor(0x0099ff)
+				.setColor(colorCheck(response.data.colors))
 				.setTitle(response.data.name)
 				.setURL(response.data.scryfall_uri)
 				.setDescription(`${interaction.user.username} searched for \`${cardName}\``)
