@@ -1,3 +1,6 @@
+// REFACTOR!! compare with Kurisu\commands\tcg\mtg.js
+
+
 const { SlashCommandBuilder,
 	ModalBuilder,
 	ActionRowBuilder,
@@ -33,6 +36,7 @@ const exampleEmbed = {
 };
 
 module.exports = {
+	category: 'search',
 	data: new SlashCommandBuilder()
 		.setName('game')
 		.setDescription('Search for a videogame'),

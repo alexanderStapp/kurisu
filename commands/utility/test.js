@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 
 module.exports = {
+	category: 'utility',
 	data: new SlashCommandBuilder()
 		.setName('test')
 		.setDescription('this is a test')

@@ -7,6 +7,7 @@ const legalChannel = 'angel-voices';
 
 module.exports = {
 	cooldown: 24,
+	category: 'fun',
 	data: new SlashCommandBuilder()
 		.setName('angelvoices')
 		.setDescription('ARCANE SYSTEMS'),

@@ -31,22 +31,22 @@ const rest = new REST().setToken(TOKEN);
 // deploy commands!
 (async () => {
 	try {
-		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+		console.log(`Started deploying ${commands.length} application (/) commands.`);
 
-		// Refresh all commands in guild
+		// Deploy all commands in guild
 		const data = await rest.put(
 			// Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
 			Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID_TEST),
 			{ body: commands }
 		);
 
-		// Refresh all commands globally
+		// Deploy all commands globally
 		// const data = await rest.put(
 		// 	Routes.applicationCommands(CLIENT_ID),
 		// 	{ body: commands }
 		// );
 
-		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+		console.log(`Successfully deployed ${data.length} application (/) commands.`);
 	} catch (error) {
 		console.error(error);
 	}
