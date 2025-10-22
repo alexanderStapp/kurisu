@@ -19,8 +19,8 @@ module.exports = {
 	once: true,
 	async execute(client) {
 
-		// This takes ~1 hour to update
-		client.application.commands.set([]);
+		// Clear all global commands. This takes ~1 hour to update
+		// client.application.commands.set([]);
 
 		const dbTest = await Characters.findOne({ where: { fighter_number: 1 } });
 		// angel voices activity

@@ -45,7 +45,6 @@ module.exports = {
 				'Accept': 'application/json'
 			}
 		}).then(response => {
-			console.log(response.data);
 			const mtgEmbed = new EmbedBuilder()
 				.setColor(colorCheck(response.data.colors))
 				.setTitle(response.data.name)
