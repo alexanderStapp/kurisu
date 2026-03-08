@@ -19,6 +19,7 @@
     "jsdom": "^26.0.0",
     "mtgsdk": "^0.2.0",
     "node-cron": "^3.0.3",
+    "puppeteer": "^24.38.0",
     "sequelize": "^6.37.5",
     "sqlite3": "^5.1.7",
     "undici": "^7.3.0"

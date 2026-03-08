@@ -3,9 +3,9 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	category: 'utility',
 	data: new SlashCommandBuilder()
-		.setName('kurisu')
+		.setName('arisu')
 		.setDescription('Do you believe in me?'),
 	async execute(interaction) {
-		await interaction.reply('My name is Kurisu. I am a bot that lives in your computer.');
+		await interaction.reply('My name is Arisu. I am a bot that lives in your computer.');
 	}
 };

@@ -1,5 +1,5 @@
 const { Events, ActivityType } = require('discord.js');
-const getGeneratorResult = require('../services/getGeneratorOutput');
+const createGeneratorPageWithResults = require('../services/generatorService').createGeneratorPageWithResults;
 // const sendMessageAndCreateThread = require('../services/sendMessageAndCreateThread');
 // const cron = require('node-cron');
 
@@ -24,7 +24,7 @@ module.exports = {
 
 		const dbTest = await Characters.findOne({ where: { fighter_number: 1 } });
 		// angel voices activity
-		client.user.setActivity(await getGeneratorResult('arcanesystems'), { type: ActivityType.Custom });
+		client.user.setActivity(await createGeneratorPageWithResults(), { type: ActivityType.Custom });
 
 		// cron test
 		// cron.schedule('* * * * *', async () => {

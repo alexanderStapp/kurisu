@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const { JSDOM } = require('jsdom');
 
 const generatorWindows = {};
@@ -105,4 +106,4 @@ async function getGeneratorResult(generatorName, listNameOrCode, variableAssignm
 	}
 }
 
-module.exports = getGeneratorResult;
+// module.exports = createGeneratorPageWithResults;
