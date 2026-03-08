@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, MessageFlags, italic } = require('discord.js');
 // const wait = require('node:timers/promises').setTimeout;
-const getGeneratorResult = require('../../services/getGeneratorOutput');
+const getGeneratorResults = require('../../services/generatorService').getGeneratorResults;
 
 const legalChannel = 'angel-voices';
 
@@ -18,7 +18,7 @@ module.exports = {
 			// await interaction.deleteReply();
 		}
 		await interaction.deferReply();
-		const result = await getGeneratorResult('arcanesystems');
+		const result = await getGeneratorResults();
 		await interaction.editReply(italic(result));
 	}
 };
