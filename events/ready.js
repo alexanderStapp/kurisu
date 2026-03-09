@@ -1,7 +1,7 @@
 const { Events, ActivityType } = require('discord.js');
-const createGeneratorPageWithResults = require('../services/generatorService').createGeneratorPageWithResults;
+const { createGeneratorPageWithResults, getGeneratorResults } = require('../services/generatorService');
 // const sendMessageAndCreateThread = require('../services/sendMessageAndCreateThread');
-// const cron = require('node-cron');
+const cron = require('node-cron');
 
 const Sequelize = require('sequelize');
 
@@ -27,22 +27,16 @@ module.exports = {
 		client.user.setActivity(await createGeneratorPageWithResults(), { type: ActivityType.Custom });
 
 		// cron test
-		// cron.schedule('* * * * *', async () => {
-		// 	const channel = client.channels.cache.get('493276796222046208');
-		// 	try {
-		// 		await sendMessageAndCreateThread(
-		// 		  channel,
-		// 		  'This is a scheduled test.',
-		// 		  'cronjob discussion',
-		// 		  4320
-		// 		);
-		// 	  } catch (error) {
-		// 		console.error('There was an error creating the message thread.', error);
-		// 	  }
+		cron.schedule('0 * * * *', async () => {
+			try {
+				client.user.setActivity(await getGeneratorResults(), { type: ActivityType.Custom });
+			  } catch (error) {
+				console.error('There was an error creating the message thread.', error);
+			  }
 
-		// }, {
-		// 	timezone: 'America/Los_Angeles'
-		// });
+		}, {
+			timezone: 'America/Los_Angeles'
+		});
 
 		// ready
 		console.log(`Ready. Logged in as self: ${client.user.tag}`,

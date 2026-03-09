@@ -3,6 +3,9 @@ const js = require('@eslint/js');
 module.exports = [
 	js.configs.recommended,
 	{
+		ignores: ['arcanesystems.html', './services/getGeneratorOutputDEPRECATED.js']
+	},
+	{
 		languageOptions: {
 			ecmaVersion: 'latest'
 		},
