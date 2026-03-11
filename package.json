@@ -11,17 +11,20 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@discordjs/opus": "^0.10.0",
     "apicalypse": "^0.3.1",
     "axios": "^1.7.9",
-    "discord.js": "^14.17.3",
+    "discord-player": "^7.2.0",
+    "discord.js": "^14.25.1",
     "dotenv": "^16.4.7",
+    "ffmpeg": "^0.0.4",
     "glob": "^11.0.3",
     "jsdom": "^26.0.0",
     "mtgsdk": "^0.2.0",
     "node-cron": "^3.0.3",
     "puppeteer": "^24.38.0",
     "sequelize": "^6.37.5",
-    "sqlite3": "^5.1.7",
+    "sqlite3": "^5.0.2",
     "undici": "^7.3.0"
   },
   "devDependencies": {

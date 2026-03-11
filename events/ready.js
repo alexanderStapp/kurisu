@@ -12,7 +12,7 @@ const sequelize = new Sequelize('database', 'user', 'password', {
 	storage: 'database.sqlite'
 });
 
-const Characters = require('../models/Characters')(sequelize, Sequelize.DataTypes);
+const Characters = require('../models/Character')(sequelize, Sequelize.DataTypes);
 
 module.exports = {
 	name: Events.ClientReady,

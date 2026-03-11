@@ -38,7 +38,7 @@ module.exports = {
 		try {
 			await command.execute(interaction);
 		} catch (error) {
-			console.error(error);
+			console.error('there was an error: ', error);
 			if (interaction.replied || interaction.deferred) {
 				await interaction.followUp({ content: 'Error while executing your command.', flags: MessageFlags.Ephemeral });
 			} else {
