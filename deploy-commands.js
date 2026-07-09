@@ -35,8 +35,8 @@ const rest = new REST().setToken(TOKEN);
 
 		// Deploy all commands in guild
 		const data = await rest.put(
-			Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
-			// Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID_TEST),
+			// Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
+			Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID_TEST),
 			{ body: commands }
 		);
 

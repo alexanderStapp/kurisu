@@ -8,8 +8,12 @@ const sequelize = new Sequelize('database', 'user', 'password', {
 	storage: 'database.sqlite'
 });
 
+require('./models/User')(sequelize, Sequelize.DataTypes);
+require('./models/ShinyAttempt')(sequelize, Sequelize.DataTypes);
+require('./models/NowPlayingMonth')(sequelize, Sequelize.DataTypes);
+require('./models/GuildSetting')(sequelize, Sequelize.DataTypes);
+require('./models/SubmittedSong')(sequelize, Sequelize.DataTypes);
 const Characters = require('./models/Character')(sequelize, Sequelize.DataTypes);
-const Users = require('./models/User')(sequelize, Sequelize.DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 
