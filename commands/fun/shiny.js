@@ -13,10 +13,10 @@ const VERSION_GROUP_BLACKLIST = ['the-isle-of-armor', 'the-crown-tundra', 'the-t
 
 const versionGroupsSelectLabel = new LabelBuilder();
 
-let defaultVersion = '';
-let defaultAttempts = '';
-let defaultTimeSpent = '';
-let defaultPokemon = '';
+const defaultVersion = '';
+const defaultAttempts = '';
+const defaultTimeSpent = '';
+const defaultPokemon = '';
 
 module.exports = {
 	category: 'fun',
@@ -27,7 +27,6 @@ module.exports = {
 		const shinyModal = new ModalBuilder()
 			.setCustomId(`shinyModal-${interaction.user.id}`)
 			.setTitle('Shiny Attempts Tracker');
-		const dbTest = await Characters.findOne({ where: { fighter_number: 1 } });
 		getVersionGroups().then(async (versionGroups) => {
 			const filteredVersionGroups = versionGroups.results.filter(versionGroup => !VERSION_GROUP_BLACKLIST.includes(versionGroup.name));
 			const mappedVersionGroups = filteredVersionGroups.map(versionGroup => new StringSelectMenuOptionBuilder()
