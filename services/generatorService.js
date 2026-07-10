@@ -10,7 +10,10 @@ async function getGeneratorResults() {
 }
 
 async function createGeneratorPageWithResults() {
-	const browser = await puppeteer.launch();
+	const browser = await puppeteer.launch({
+		executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+		args: ['--no-sandbox', '--disable-setuid-sandbox']
+	});
 	page = await browser.newPage();
 	console.log('Generator page created');
 	await page.goto('file://' + path.resolve('arcanesystems.html'));

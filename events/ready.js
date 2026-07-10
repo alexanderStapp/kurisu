@@ -1,7 +1,8 @@
 const { Events, ActivityType } = require('discord.js');
-const createGeneratorPageWithResults = require('../services/generatorService').createGeneratorPageWithResults;
+const { createGeneratorPageWithResults, getGeneratorResults } = require('../services/generatorService');
+const { ensureAllMonths } = require('../services/nowPlayingService');
 // const sendMessageAndCreateThread = require('../services/sendMessageAndCreateThread');
-// const cron = require('node-cron');
+const cron = require('node-cron');
 
 const Sequelize = require('sequelize');
 
@@ -12,7 +13,7 @@ const sequelize = new Sequelize('database', 'user', 'password', {
 	storage: 'database.sqlite'
 });
 
-const Characters = require('../models/Characters')(sequelize, Sequelize.DataTypes);
+const Characters = require('../models/Character')(sequelize, Sequelize.DataTypes);
 
 module.exports = {
 	name: Events.ClientReady,
@@ -27,22 +28,32 @@ module.exports = {
 		client.user.setActivity(await createGeneratorPageWithResults(), { type: ActivityType.Custom });
 
 		// cron test
-		// cron.schedule('* * * * *', async () => {
-		// 	const channel = client.channels.cache.get('493276796222046208');
-		// 	try {
-		// 		await sendMessageAndCreateThread(
-		// 		  channel,
-		// 		  'This is a scheduled test.',
-		// 		  'cronjob discussion',
-		// 		  4320
-		// 		);
-		// 	  } catch (error) {
-		// 		console.error('There was an error creating the message thread.', error);
-		// 	  }
+		cron.schedule('0 * * * *', async () => {
+			try {
+				client.user.setActivity(await getGeneratorResults(), { type: ActivityType.Custom });
+			  } catch (error) {
+				console.error('There was an error creating the message thread.', error);
+			  }
 
-		// }, {
-		// 	timezone: 'America/Los_Angeles'
-		// });
+		}, {
+			timezone: 'America/Los_Angeles'
+		});
+
+		try {
+			await ensureAllMonths(client);
+		} catch (error) {
+			console.error('Failed to ensure Now Playing months on startup:', error.message);
+		}
+
+		cron.schedule('0 0 1 * *', async () => {
+			try {
+				await ensureAllMonths(client);
+			} catch (error) {
+				console.error('Failed to ensure Now Playing months:', error.message);
+			}
+		}, {
+			timezone: 'America/Los_Angeles'
+		});
 
 		// ready
 		console.log(`Ready. Logged in as self: ${client.user.tag}`,
