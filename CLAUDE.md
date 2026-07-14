@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Arisu is a Discord bot built on discord.js v14. It uses SQLite via Sequelize for persistence and Puppeteer to drive a local HTML-based text generator. It also runs a monthly "Now Playing" music feature that collects song submissions in a forum channel (see below).
+Arisu is a Discord bot built on discord.js v14. It uses SQLite via Sequelize for persistence and Puppeteer to drive a local HTML-based text generator.
 
 ## Commands
 
@@ -42,9 +42,9 @@ Adding a new file under `commands/{category}/` is enough to register it at start
 ### Event handlers (`events/`)
 
 - **`interactionCreate.js`** — routes every `ChatInputCommand` interaction to the matching command, enforces per-user cooldowns, and catches/reports errors.
-- **`ready.js`** — on login: launches a persistent Puppeteer browser that loads `arcanesystems.html` (gitignored, must be present locally), sets bot activity to the generator output, then schedules an hourly cron to refresh it. The Puppeteer `page` object is module-level state inside `services/generatorService.js`. Also runs the Now Playing startup catch-up (`ensureAllMonths`) and registers the monthly rollover cron.
-- **`messageCreate.js`** — Now Playing: watches for single-track Spotify links posted in managed forum threads and forwards them to the guild's admin song channel.
-- **`messageReactionAdd.js`** — Now Playing: relays the admin's ✅/❌ on a forwarded submission back onto the original user's message. Requires the `GuildMessageReactions` intent plus the `Message`/`Channel`/`Reaction` partials (set in `index.js`).
+- **`ready.js`** — on login: launches a persistent Puppeteer browser that loads `arcanesystems.html` (gitignored, must be present locally), sets bot activity to the generator output, then schedules an hourly cron to refresh it. The Puppeteer `page` object is module-level state inside `services/generatorService.js`.
+
+The client runs on the single `Guilds` intent — the bot does not read message content.
 
 ### Database (`models/`, `dbInit.js`)
 
@@ -53,9 +53,8 @@ Models are factory functions: `(sequelize, DataTypes) => sequelize.define(...)`.
 - `characters` — Smash Bros fighters seeded from `sources/charactersSource.js`, includes voting and elimination fields.
 - `users` — Discord user IDs.
 - `shiny_attempts` — per-user shiny hunt sessions (user_id, pokemon_id, game_id, attempts, total_time, status).
-- `guild_settings` — per-guild Now Playing config (guild_id, music_forum_channel_id, song_channel_id).
-- `now_playing_months` — one row per guild/month (guild_id, year, month, sequence, forum_thread_id); `sequence` is the per-guild monotonic counter rendered as a roman numeral.
-- `submitted_songs` — Now Playing submissions (guild_id, year, month, track_id, thread/admin message ids, status); unique on `(guild_id, year, month, track_id)` gives per-month dedup.
+
+`database.sqlite` also still carries `guild_settings`, `now_playing_months`, and `submitted_songs` from the removed Now Playing feature. Nothing reads or writes them; they are dropped by `node dbInit.js --force`.
 
 `dbInit.js` is the canonical way to seed. `syncdb.js` and `dbObjects.js` are incomplete work-in-progress files and should not be relied upon.
 
@@ -67,14 +66,16 @@ All credentials live in `config.json` (gitignored): `TOKEN`, `CLIENT_ID`, `GUILD
 
 These are separate steps. `deploy-commands.js` uses the Discord REST API to register slash commands to `GUILD_ID_TEST` (guild-scoped, instant); `GUILD_ID` and global deployment are present but commented out. The bot process (`npm start`) does not re-register commands — they persist in Discord until explicitly updated or cleared.
 
-### Now Playing feature
+### Spotify: do not attempt
 
-A monthly music feature spanning `services/nowPlayingService.js`, the `messageCreate`/`messageReactionAdd` events, and three `utility` commands. It uses no external music API — it only moves links and reactions around Discord.
+A "Now Playing" feature (monthly forum thread → Spotify playlist) was built and then removed. Anything that needs to **read or write Spotify playlist contents is impossible** for this bot, and this is a policy wall, not a configuration problem:
 
-- **Setup (per guild, admin-only, `ManageGuild`):** `/set-music-forum` sets the forum channel to watch; `/set-song-channel` sets the admin text channel submissions are forwarded to. Both persist into `guild_settings`.
-- **Month rollover** (`ensureMonthForGuild`, driven by ready-time catch-up, a monthly cron, or `/init-now-playing`): creates a pinned forum thread "Now Playing, {Month} {Year}" (tagged "Now Playing"), unpins the prior month, and posts `create new playlist, title: now_playing_{roman}` to the admin channel. Idempotent per guild/month via `now_playing_months`; the DB row is saved before the best-effort pin so a missing permission can't spawn duplicate posts.
-- **Submission flow:** a user posts a single-track Spotify link in a managed thread → the bot dedups it, reacts ⏳ on the user's message, and forwards the link to the admin channel with ✅/❌ pre-added. An admin adds the track to the playlist by hand, then clicks ✅ (success) or ❌ (fail); the bot relays that decision back as ✅/❌ on the original user's message. Reactions: ⏳ pending, ✅ added, 🔁 duplicate this month, ❌ invalid link / failed.
-- **Intents:** requires `GuildMessages`, `MessageContent` (privileged), and `GuildMessageReactions`, plus `Message`/`Channel`/`Reaction` partials — all set in `index.js`.
+- Apps in Spotify **Development Mode** get `403 Forbidden` on playlist-contents endpoints. `GET /playlists/{id}/tracks` 403s for *every* playlist, including public ones the app owns, and the `tracks` field is stripped from the playlist object entirely. Playlist **metadata** (name, owner, images) and the **catalog** endpoints (`/search`, `/tracks/{id}`) still return `200`.
+- Playlist writes (`POST /users/{id}/playlists`, adding tracks) 403 the same way, even for an app owned by the target account.
+- **Extended Quota Mode**, which would lift this, has been restricted to scaled/commercial apps since 2025-05-15. Hobby apps cannot get it.
+- There is no playlist webhook/event API; it is poll-only even if you had access.
+
+A bot account also cannot display the real Spotify "Listening to" rich-presence card — that comes from a *user* account's Spotify connection. A bot can only set a plain activity, and Discord renders **one** activity at a time (extra entries in the `activities` array are silently dropped). A non-Custom activity's `state` field does render as a second line, but only in the profile popout, never in the member list.
 
 ### CI/CD
 

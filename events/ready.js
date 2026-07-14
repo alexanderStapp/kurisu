@@ -1,6 +1,5 @@
 const { Events, ActivityType } = require('discord.js');
 const { createGeneratorPageWithResults, getGeneratorResults } = require('../services/generatorService');
-const { ensureAllMonths } = require('../services/nowPlayingService');
 // const sendMessageAndCreateThread = require('../services/sendMessageAndCreateThread');
 const cron = require('node-cron');
 
@@ -35,22 +34,6 @@ module.exports = {
 				console.error('There was an error creating the message thread.', error);
 			  }
 
-		}, {
-			timezone: 'America/Los_Angeles'
-		});
-
-		try {
-			await ensureAllMonths(client);
-		} catch (error) {
-			console.error('Failed to ensure Now Playing months on startup:', error.message);
-		}
-
-		cron.schedule('0 0 1 * *', async () => {
-			try {
-				await ensureAllMonths(client);
-			} catch (error) {
-				console.error('Failed to ensure Now Playing months:', error.message);
-			}
 		}, {
 			timezone: 'America/Los_Angeles'
 		});
