@@ -11,6 +11,7 @@ const sequelize = new Sequelize('database', 'user', 'password', {
 require('./models/User')(sequelize, Sequelize.DataTypes);
 require('./models/ShinyAttempt')(sequelize, Sequelize.DataTypes);
 require('./models/CommandCooldown')(sequelize, Sequelize.DataTypes);
+require('./models/ColorPicker')(sequelize, Sequelize.DataTypes);
 const Characters = require('./models/Character')(sequelize, Sequelize.DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');

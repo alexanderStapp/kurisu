@@ -1,9 +1,22 @@
 const { Events, MessageFlags } = require('discord.js');
 const { getCooldownExpiry, startCooldown } = require('../services/cooldownService');
+const { COLOR_SELECT_ID, handleColorSelect } = require('../services/colorRoleService');
 
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
+		if (interaction.isStringSelectMenu() && interaction.customId === COLOR_SELECT_ID) {
+			try {
+				await handleColorSelect(interaction);
+			} catch (error) {
+				console.error('there was an error handling a color selection: ', error);
+				if (!interaction.replied && !interaction.deferred) {
+					await interaction.reply({ content: 'I could not change your color. I may be missing the Manage Roles permission, or my role may sit below the color roles.', flags: MessageFlags.Ephemeral });
+				}
+			}
+			return;
+		}
+
 		if (!interaction.isChatInputCommand()) return;
 
 		const command = interaction.client.commands.get(interaction.commandName);

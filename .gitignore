@@ -2,5 +2,6 @@ config.json
 .env
 node_modules
 database.sqlite
-sources
+sources/*
+!sources/colorsSource.js
 arcanesystems.html

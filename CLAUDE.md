@@ -44,7 +44,7 @@ Adding a new file under `commands/{category}/` is enough to register it at start
 
 ### Event handlers (`events/`)
 
-- **`interactionCreate.js`** — routes every `ChatInputCommand` interaction to the matching command, enforces per-user cooldowns, and catches/reports errors.
+- **`interactionCreate.js`** — routes every `ChatInputCommand` interaction to the matching command, enforces per-user cooldowns, and catches/reports errors. Also routes the color-picker select menu (`customId` `color-select`) to `services/colorRoleService.js`.
 - **`ready.js`** — on login: launches a persistent Puppeteer browser that loads `arcanesystems.html` (gitignored, must be present locally), sets bot activity to the generator output, then schedules an hourly cron to refresh it. The Puppeteer `page` object is module-level state inside `services/generatorService.js`.
 
 The client runs on the single `Guilds` intent — the bot does not read message content.
@@ -57,6 +57,7 @@ Models are factory functions: `(sequelize, DataTypes) => sequelize.define(...)`.
 - `users` — Discord user IDs.
 - `shiny_attempts` — per-user shiny hunt sessions (user_id, pokemon_id, game_id, attempts, total_time, status).
 - `command_cooldowns` — persisted per-user command cooldowns (user_id, command_name, expires_at); unique on `(user_id, command_name)`. Expired rows are deleted lazily on read.
+- `color_pickers` — one row per guild (guild_id PK, channel_id, message_id) locating the posted color-picker message so `/post-colors` can edit it in place.
 
 `database.sqlite` also still carries `guild_settings`, `now_playing_months`, and `submitted_songs` from the removed Now Playing feature. Nothing reads or writes them; they are dropped by `node dbInit.js --force`.
 
@@ -69,6 +70,15 @@ All credentials live in `config.json` (gitignored): `TOKEN`, `CLIENT_ID`, `GUILD
 ### Deploy vs. run
 
 These are separate steps. `deploy-commands.js` uses the Discord REST API to register slash commands to `GUILD_ID_TEST` (guild-scoped, instant); `GUILD_ID` and global deployment are present but commented out. The bot process (`npm start`) does not re-register commands — they persist in Discord until explicitly updated or cleared.
+
+### Color picker
+
+`/post-colors <channel>` (`ManageGuild`) posts a message with a dropdown of color roles; picking one swaps the member's current color role for the chosen one, and a `clear` option removes it. Ephemeral confirmation either way.
+
+- The palette is a list of **role names** in `sources/colorsSource.js`. Arisu never creates, renames, or recolors roles — the roles must already exist in the guild with those exact names, and Discord is the single source of truth for what each color looks like.
+- `/post-colors` refuses to post if any palette role is missing, if Arisu lacks `ManageRoles`, or if any color role sits **at or above** her highest role (she cannot assign those). It names the offenders instead of publishing a broken menu.
+- Hierarchy gotcha: Discord paints a name with the member's **highest colored role**, so any *other* colored role above the palette (e.g. an `Owner` role) silently wins and the color appears not to change.
+- The menu is routed by `customId`, not a collector, so it survives restarts indefinitely. Re-running `/post-colors` edits the existing message in place (or moves it to a new channel) rather than posting a duplicate — the message is tracked in `color_pickers`.
 
 ### Spotify: do not attempt
 
