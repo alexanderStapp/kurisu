@@ -32,10 +32,13 @@ Every command file in `commands/` must export:
 module.exports = {
     category: 'fun' | 'search' | 'utility',
     cooldown: 5,          // optional, seconds; defaults to 3 in interactionCreate.js
+    cooldownBypassPermission: PermissionFlagsBits.Administrator,  // optional; members with this permission skip the cooldown
     data: new SlashCommandBuilder()...,
     async execute(interaction) { ... }
 };
 ```
+
+Cooldowns are **persisted to SQLite** (`command_cooldowns`, via `services/cooldownService.js`), so they survive restarts and deploys — this matters because `/angelvoices` has a 12-hour cooldown. `cooldownBypassPermission` is opt-in per command; only `/angelvoices` sets it.
 
 Adding a new file under `commands/{category}/` is enough to register it at startup. To make it available to users you must also run `node deploy-commands.js`.
 
@@ -53,6 +56,7 @@ Models are factory functions: `(sequelize, DataTypes) => sequelize.define(...)`.
 - `characters` — Smash Bros fighters seeded from `sources/charactersSource.js`, includes voting and elimination fields.
 - `users` — Discord user IDs.
 - `shiny_attempts` — per-user shiny hunt sessions (user_id, pokemon_id, game_id, attempts, total_time, status).
+- `command_cooldowns` — persisted per-user command cooldowns (user_id, command_name, expires_at); unique on `(user_id, command_name)`. Expired rows are deleted lazily on read.
 
 `database.sqlite` also still carries `guild_settings`, `now_playing_months`, and `submitted_songs` from the removed Now Playing feature. Nothing reads or writes them; they are dropped by `node dbInit.js --force`.
 

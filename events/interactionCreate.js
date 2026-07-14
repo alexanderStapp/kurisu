@@ -1,4 +1,5 @@
-const { Collection, Events, MessageFlags } = require('discord.js');
+const { Events, MessageFlags } = require('discord.js');
+const { getCooldownExpiry, startCooldown } = require('../services/cooldownService');
 
 module.exports = {
 	name: Events.InteractionCreate,
@@ -12,28 +13,23 @@ module.exports = {
 			return;
 		}
 
-		const { cooldowns } = interaction.client;
-
-		if (!cooldowns.has(command.data.name)) {
-			cooldowns.set(command.data.name, new Collection());
-		}
-
-		const now = Date.now();
-		const timestamps = cooldowns.get(command.data.name);
 		const defaultCooldownDuration = 3;
 		const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1_000;
 
-		if (timestamps.has(interaction.user.id)) {
-			const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
+		const bypasses = command.cooldownBypassPermission
+			&& interaction.memberPermissions
+			&& interaction.memberPermissions.has(command.cooldownBypassPermission);
 
-			if (now < expirationTime) {
+		if (!bypasses) {
+			const expirationTime = await getCooldownExpiry(interaction.user.id, command.data.name);
+
+			if (expirationTime) {
 				const expiredTimestamp = Math.round(expirationTime / 1_000);
 				return interaction.reply({ content: `You are on cooldown for \`${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>.`, flags: MessageFlags.Ephemeral });
 			}
-		}
 
-		timestamps.set(interaction.user.id, now);
-		setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
+			await startCooldown(interaction.user.id, command.data.name, cooldownAmount);
+		}
 
 		try {
 			await command.execute(interaction);
